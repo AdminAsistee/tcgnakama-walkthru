@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: tcgnakama-demo
+    env: python
+    pythonVersion: "3.11"
+    buildCommand: >
+      npm install &&
+      node node_modules/typescript/bin/tsc &&
+      node node_modules/vite/bin/vite.js build &&
+      pip install -r backend/requirements.txt &&
+      cd backend && python seed_data.py
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CHROMA_PERSIST_DIR
+        value: ./chroma_data
